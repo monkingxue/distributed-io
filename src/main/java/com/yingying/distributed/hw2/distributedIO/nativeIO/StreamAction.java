@@ -12,9 +12,7 @@ public class StreamAction extends DIOAction {
     }
 
     public void close() throws IOException {
-        for (int item : buffer) {
-            bop.write(item);
-        }
+        bop.write(buffer);
         bop.flush();
         bop.close();
     }

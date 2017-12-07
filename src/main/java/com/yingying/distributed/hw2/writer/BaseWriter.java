@@ -42,7 +42,7 @@ public abstract class BaseWriter {
         }
     }
 
-    private List<int[]> parallelGenerate(int threadNum) {
+    private List<byte[]> parallelGenerate(int threadNum) {
         final int divide = Math.min(Config.range / threadNum + 1, Config.range);
         return IntStream.rangeClosed(1, threadNum)
                 .parallel()
@@ -50,7 +50,7 @@ public abstract class BaseWriter {
                     final int start = divide * n - (divide - 1);
                     final int end = start + divide - 1;
                     return Producer.getData(start, Math.min(Config.range, end))
-                            .toArray();
+                            .collect(Collectors.joining()).getBytes();
                 }).collect(Collectors.toList());
     }
 
@@ -61,7 +61,7 @@ public abstract class BaseWriter {
 
         ExecutorService executor = Executors.newFixedThreadPool(threadNum);
 
-        final List<int[]> result = parallelGenerate(threadNum);
+        final List<byte[]> result = parallelGenerate(threadNum);
 
         CompletableFuture<Void> currentPromise = CompletableFuture
                 .runAsync(() -> io.write(result.get(0)), executor);

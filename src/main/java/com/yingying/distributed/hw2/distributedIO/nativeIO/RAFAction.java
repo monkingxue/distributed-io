@@ -15,9 +15,7 @@ public class RAFAction extends DIOAction {
 
     @Override
     public void close() throws IOException {
-        for (int item : buffer) {
-            raf.write(item);
-        }
+        raf.write(buffer);
         raf.close();
     }
 }

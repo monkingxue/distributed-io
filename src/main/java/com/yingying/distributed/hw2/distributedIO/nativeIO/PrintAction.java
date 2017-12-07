@@ -16,10 +16,9 @@ public class PrintAction extends DIOAction {
 
     @Override
     public void close() {
-        for (int item : buffer) {
+        for (byte item : buffer) {
             pw.print(item);
         }
-
         pw.close();
     }
 }
