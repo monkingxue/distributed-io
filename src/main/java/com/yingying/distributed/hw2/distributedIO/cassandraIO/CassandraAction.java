@@ -10,12 +10,6 @@ public abstract class CassandraAction extends DIOAction {
     protected Session session;
     private int uuid = 1;
 
-    public CassandraAction() {
-    }
-
-    public CassandraAction(Cluster cluster) {
-        session = cluster.connect("keyspace_user20");
-    }
 
     protected int getAndUpdateUUID() {
         return uuid++;
