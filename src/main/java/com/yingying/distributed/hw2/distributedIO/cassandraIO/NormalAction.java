@@ -4,7 +4,7 @@ public class NormalAction extends CassandraAction {
 
     @Override
     public void close() {
-        for (byte item : buffer) {
+        for (int item : buffer) {
             session.execute("INSERT INTO number(pk, num) VALUES (" + item + ",  1);");
         }
     }

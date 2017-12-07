@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.stream.IntStream;
 
 public abstract class DIOAction {
-    protected byte[] buffer;
+    protected int[] buffer;
     private int waterLine;
 
     public DIOAction() {
-        buffer = new byte[getByteSize()];
+        buffer = new int[getByteSize()];
         waterLine = 0;
     }
 
@@ -24,8 +24,8 @@ public abstract class DIOAction {
         return size * Config.repeat;
     }
 
-    public void write(byte[] data) {
-        for (byte item : data) {
+    public void write(int[] data) {
+        for (int item : data) {
             buffer[waterLine] = item;
             waterLine += 1;
         }
