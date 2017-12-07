@@ -48,36 +48,24 @@ public abstract class BaseWriter {
         }
     }
 
-    private List<int[]> parallelGenerate(int threadNum) {
-        final int divide = Math.min(Config.range / threadNum + 1, Config.range);
-        return IntStream.rangeClosed(1, threadNum)
-                .parallel()
-                .mapToObj(n -> {
-                    final int start = divide * n - (divide - 1);
-                    final int end = start + divide - 1;
-                    return Producer.getData(start, Math.min(Config.range, end)).toArray();
-                }).collect(Collectors.toList());
-    }
-
     private void writeByMultiThread(int threadNum, DIOAction io) {
         if (threadNum <= 0) {
             return;
         }
 
         ExecutorService executor = Executors.newFixedThreadPool(threadNum);
+        final int divide = Math.min(Config.range / threadNum + 1, Config.range);
 
-        final List<int[]> result = parallelGenerate(threadNum);
+        List<CompletableFuture<Void>> futures = IntStream
+                .range(1, threadNum).mapToObj(n -> CompletableFuture.runAsync(() -> {
+                    final int start = divide * n - (divide - 1);
+                    final int end = start + divide - 1;
 
-        CompletableFuture<Void> currentPromise = CompletableFuture
-                .runAsync(() -> io.write(result.get(0)), executor);
+                    io.write(Producer.getData(start, Math.min(Config.range, end)));
+                }, executor)).collect(Collectors.toList());
 
-        for (int i = 1; i < threadNum; i++) {
-            final int index = i;
-            currentPromise = currentPromise.thenAcceptAsync(n ->
-                    io.write(result.get(index)), executor);
-        }
 
-        currentPromise.join();
+        futures.stream().map(CompletableFuture::join);
         executor.shutdown();
     }
 }
