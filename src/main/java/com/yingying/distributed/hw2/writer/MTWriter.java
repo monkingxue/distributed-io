@@ -40,8 +40,8 @@ public class MTWriter extends BaseWriter {
 
     public static void main(String args[]) {
         MTWriter mtw = new MTWriter();
-//        mtw.printTest();
+        mtw.printTest();
         mtw.rafTest();
-//        mtw.streamTest();
+        mtw.streamTest();
     }
 }
