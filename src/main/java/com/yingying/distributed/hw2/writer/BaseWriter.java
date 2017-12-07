@@ -57,14 +57,17 @@ public abstract class BaseWriter {
         ExecutorService executor = Executors.newFixedThreadPool(threadNum);
         final int divide = Math.min(Config.range / threadNum + 1, Config.range);
 
-        List<CompletableFuture<Void>> futures = IntStream
-                .range(1, threadNum).mapToObj(n -> CompletableFuture.runAsync(() -> {
-                    final int start = divide * n - (divide - 1);
-                    final int end = start + divide - 1;
-                    io.write(Producer.getData(start, Math.min(Config.range, end)));
-                }, executor)).collect(Collectors.toList());
+        CompletableFuture<Void> currentPromise = CompletableFuture
+                .runAsync(() -> io.write(Producer.getData(1, divide)), executor);
 
-        futures.stream().map(CompletableFuture::join);
+        for (int i = 1; i < threadNum; i++) {
+            final int start = divide * i + 1;
+            final int end = start + divide - 1;
+            currentPromise = currentPromise.thenAcceptAsync(n ->
+                    io.write(Producer.getData(start, Math.min(Config.range, end))), executor);
+        }
+
+        currentPromise.join();
         executor.shutdown();
     }
 }

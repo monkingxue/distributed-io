@@ -10,5 +10,5 @@ public class Config {
 //    static final public int range = 2014 * 512;
 //    static final public int repeat = 256;
     static final public int range = 30;
-    static final public int repeat = 5;
+    static final public int repeat = 30;
 }
