@@ -26,12 +26,14 @@ public abstract class BaseWriter {
                 for (int num : threadNumArray) {
                     DIOAction io = initialize(clazz, suffix);
 
-                    Tool.executionTime(() -> writeByMultiThread(num, io));
-                    try {
-                        io.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    writeByMultiThread(num, io);
+                    Tool.executionTime(() -> {
+                        try {
+                            io.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
                 System.out.println("Total Time: ");
             });
