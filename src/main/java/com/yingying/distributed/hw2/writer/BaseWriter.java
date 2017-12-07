@@ -28,10 +28,11 @@ public abstract class BaseWriter {
         try {
             Tool.executionTime(() -> {
                 for (int num : threadNumArray) {
-                    DIOAction io = initialize(clazz, suffix);
-
-                    writeByMultiThread(num, io);
                     Tool.executionTime(() -> {
+
+                        DIOAction io = initialize(clazz, suffix);
+
+                        writeByMultiThread(num, io);
                         try {
                             io.close();
                         } catch (IOException e) {
@@ -56,6 +57,7 @@ public abstract class BaseWriter {
                     final int start = divide * n - (divide - 1);
                     final int end = start + divide - 1;
                     return Producer.getData(start, Math.min(Config.range, end))
+                            .boxed().map(Object::toString)
                             .collect(Collectors.joining()).getBytes();
                 }).collect(Collectors.toList());
     }
