@@ -1,4 +1,5 @@
 .idea
 hw2.iml
 target
-out
+out/
+/META-INF/

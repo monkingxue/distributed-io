@@ -18,6 +18,10 @@ public abstract class BaseWriter {
 
     protected abstract DIOAction initialize(Class<? extends DIOAction> clazz, String suffix);
 
+    protected void execute(Class<? extends DIOAction> clazz) {
+        execute(clazz, "");
+    }
+
     protected void execute(Class<? extends DIOAction> clazz, String suffix) {
         System.out.println("The time of " + clazz.getSimpleName() + " is: \n");
 

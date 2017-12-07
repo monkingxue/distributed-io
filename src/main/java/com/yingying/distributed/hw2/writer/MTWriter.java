@@ -7,7 +7,6 @@ import com.yingying.distributed.hw2.distributedIO.nativeIO.RAFAction;
 import com.yingying.distributed.hw2.distributedIO.nativeIO.StreamAction;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -41,8 +40,8 @@ public class MTWriter extends BaseWriter {
 
     public static void main(String args[]) {
         MTWriter mtw = new MTWriter();
-//        mtw.printTest();
+        mtw.printTest();
         mtw.rafTest();
-//        mtw.streamTest();
+        mtw.streamTest();
     }
 }
