@@ -3,3 +3,5 @@ hw2.iml
 target
 out/
 /META-INF/
+*.docx
+*.zip
